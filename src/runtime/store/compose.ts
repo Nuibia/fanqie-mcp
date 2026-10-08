@@ -1,0 +1,70 @@
+import { type Store } from './authority.js';
+import { type StoreOwner } from './owner.js';
+import { type StoreGlobals } from './globals.js';
+import { type StoreOperations } from './operations.js';
+import { composeWithPublicProjectionRead } from './compose-with-public-projection-read.js';
+import { composeBindExistingSqlRead } from './compose-bind-existing-sql-read.js';
+import { composeEnsureOpen } from './compose-ensure-open.js';
+import { composeAssertOwnership } from './compose-assert-ownership.js';
+import { composeRawJob } from './compose-raw-job.js';
+import { composeFindIdempotent } from './compose-find-idempotent.js';
+import { composeMarkPlatformReadStarted } from './compose-mark-platform-read-started.js';
+import { composePersistNativeShortBodyStage } from './compose-persist-native-short-body-stage.js';
+import { composeIssueNativeShortBodyWriteAuthority } from './compose-issue-native-short-body-write-authority.js';
+import { composeValidateNativeShortBodyHistory } from './compose-validate-native-short-body-history.js';
+import { composeNativeShortSubmissionContext } from './compose-native-short-submission-context.js';
+import { composeNativeShortCoverContext } from './compose-native-short-cover-context.js';
+import { composeRereadGenericShortPublicationGraph } from './compose-reread-generic-short-publication-graph.js';
+import { composeGenericHistorical } from './compose-generic-historical.js';
+import { composeGenericLedger } from './compose-generic-ledger.js';
+import { composeGenericCreationPrior } from './compose-generic-creation-prior.js';
+import { composeGenericCreationOpenFamily } from './compose-generic-creation-open-family.js';
+import { composeGenericReadFailure } from './compose-generic-read-failure.js';
+import { composeAddJobMetadata } from './compose-add-job-metadata.js';
+import { composeReadEvidence } from './compose-read-evidence.js';
+import { composeResolveOperatorEntryInvestigation } from './compose-resolve-operator-entry-investigation.js';
+import { composeNativeCompensationSource } from './compose-native-compensation-source.js';
+import { composeNativeReconciliationRow } from './compose-native-reconciliation-row.js';
+import { composeReconcileNativeShortWrite } from './compose-reconcile-native-short-write.js';
+import { composeReconcileNativeShortSubmissionWrite } from './compose-reconcile-native-short-submission-write.js';
+import { composeReconcileNativeShortTrialWrite } from './compose-reconcile-native-short-trial-write.js';
+import { composeReconcileNativeShortCoverWrite } from './compose-reconcile-native-short-cover-write.js';
+import { composeCompleteCreationRecovery } from './compose-complete-creation-recovery.js';
+import { composeGetCreationRepair } from './compose-get-creation-repair.js';
+export function composeStoreOperations(
+  owner: StoreOwner,
+  store: Store,
+  globals: StoreGlobals,
+): StoreOperations {
+  const operations = {} as StoreOperations;
+  composeWithPublicProjectionRead(owner, store, globals, operations);
+  composeBindExistingSqlRead(owner, store, globals, operations);
+  composeEnsureOpen(owner, store, globals, operations);
+  composeAssertOwnership(owner, store, globals, operations);
+  composeRawJob(owner, store, globals, operations);
+  composeFindIdempotent(owner, store, globals, operations);
+  composeMarkPlatformReadStarted(owner, store, globals, operations);
+  composePersistNativeShortBodyStage(owner, store, globals, operations);
+  composeIssueNativeShortBodyWriteAuthority(owner, store, globals, operations);
+  composeValidateNativeShortBodyHistory(owner, store, globals, operations);
+  composeNativeShortSubmissionContext(owner, store, globals, operations);
+  composeNativeShortCoverContext(owner, store, globals, operations);
+  composeRereadGenericShortPublicationGraph(owner, store, globals, operations);
+  composeGenericHistorical(owner, store, globals, operations);
+  composeGenericLedger(owner, store, globals, operations);
+  composeGenericCreationPrior(owner, store, globals, operations);
+  composeGenericCreationOpenFamily(owner, store, globals, operations);
+  composeGenericReadFailure(owner, store, globals, operations);
+  composeAddJobMetadata(owner, store, globals, operations);
+  composeReadEvidence(owner, store, globals, operations);
+  composeResolveOperatorEntryInvestigation(owner, store, globals, operations);
+  composeNativeCompensationSource(owner, store, globals, operations);
+  composeNativeReconciliationRow(owner, store, globals, operations);
+  composeReconcileNativeShortWrite(owner, store, globals, operations);
+  composeReconcileNativeShortSubmissionWrite(owner, store, globals, operations);
+  composeReconcileNativeShortTrialWrite(owner, store, globals, operations);
+  composeReconcileNativeShortCoverWrite(owner, store, globals, operations);
+  composeCompleteCreationRecovery(owner, store, globals, operations);
+  composeGetCreationRepair(owner, store, globals, operations);
+  return operations;
+}

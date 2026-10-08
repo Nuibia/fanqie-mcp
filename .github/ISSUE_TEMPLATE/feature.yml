@@ -1,0 +1,15 @@
+name: 建议或文档改进
+description: 描述使用场景和文档缺口
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 使用场景
+      description: 希望解决什么问题，当前在哪一步受阻？不要包含私人数据。
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 建议
+      description: 期望行为或需要补充的文档示例

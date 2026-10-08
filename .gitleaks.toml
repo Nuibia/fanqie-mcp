@@ -1,0 +1,12 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "SHA-256 source inventories in three synthetic evidence tests (not credentials)"
+condition = "AND"
+paths = ['''^test/(public-overview|short-native-metadata-integration|runtime)\.test\.ts$''']
+regexTarget = "line"
+regexes = ['''^\s*["'](?:src/platform/short-metadata-api-schema|src/platform/short-native-metadata-api|test/short-native-metadata-api\.test)\.ts["']:\s*["'][a-f0-9]{64}["'],?\s*$''']

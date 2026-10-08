@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "fanqie": {
+      "type": "http",
+      "url": "http://127.0.0.1:18062/mcp",
+      "headers": { "Authorization": "Bearer ${FANQIE_MCP_TOKEN}" }
+    }
+  }
+}

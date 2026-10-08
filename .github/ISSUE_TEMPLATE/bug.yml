@@ -1,0 +1,33 @@
+name: 安装或查询问题
+description: 报告安装、Host 接入或平台读取失败
+body:
+  - type: markdown
+    attributes:
+      value: 不要提交 Token、Cookie、二维码、账号身份、作品正文或原始截图。安全漏洞按 SECURITY.md 私密报告。
+  - type: input
+    id: version
+    attributes:
+      label: 项目版本或 commit
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: 操作系统、Node/Docker 版本、Host 名称与版本、源码或 Docker 启动方式
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤和预期结果
+      description: 工具名、脱敏参数、在哪一步失败；使用合成 ID 替代真实账号或作品 ID
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+      description: 脱敏错误码、job.status、sourceMode、coverage；不要粘贴原始日志或凭据
+    validations:
+      required: true

@@ -1,0 +1,53 @@
+{
+  "name": "fanqie-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-hosted Fanqie author platform service with HTTP MCP and REST APIs",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "prepare": "node scripts/install-git-hooks.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs",
+    "commitlint": "commitlint",
+    "commitlint:ci": "node scripts/check-commits.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "dev": "yarn build && node dist/index.js",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test:prepare": "node --import tsx scripts/prepare-test-fixtures.mjs",
+    "test": "node --import tsx --test --test-concurrency=4 test/*.test.ts && node --no-warnings --test --test-concurrency=4 scripts/test/*.test.mjs",
+    "check": "yarn lint && yarn format:check && yarn typecheck && yarn test",
+    "build": "tsc -p tsconfig.build.json",
+    "dev:compile": "tsc -p tsconfig.build.json --watch",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix --max-warnings=0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/node": "2.1.0",
+    "@modelcontextprotocol/server": "2.2.0",
+    "jsqr": "1.4.0",
+    "playwright": "1.63.0",
+    "pngjs": "7.0.0",
+    "zod": "4.5.2",
+    "hono": "4.13.12"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "@modelcontextprotocol/client": "2.2.0",
+    "@types/node": "^24.0.0",
+    "@types/pngjs": "6.0.5",
+    "@typescript-eslint/parser": "8.71.1",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "husky": "9.1.7",
+    "prettier": "3.9.9",
+    "tsx": "^4.20.0",
+    "typescript": "5.9.3"
+  },
+  "packageManager": "yarn@1.22.22"
+}

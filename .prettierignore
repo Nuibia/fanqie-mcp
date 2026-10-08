@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.runtime/
+.secrets/
+.openai/
+data/
+profile/
+artifacts/
+logs/
+yarn.lock
+# Byte-pinned upstream fixtures must retain their original bytes.
+test/fixtures/*.gz
+test/fixtures/*.txt
+test/fixtures/short-native-submission-public-sources-20261007.manifest.json

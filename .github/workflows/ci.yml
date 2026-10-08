@@ -1,0 +1,51 @@
+name: check
+on: [push, pull_request]
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+      - run: corepack enable && corepack prepare yarn@1.22.22 --activate
+      - run: yarn install --frozen-lockfile --ignore-scripts
+      - name: Validate commit messages
+        env:
+          COMMIT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: yarn commitlint:ci
+      - run: yarn lint
+      - run: yarn format:check
+      - run: yarn typecheck
+      - run: node --no-warnings --test --test-concurrency=2 --test-reporter=tap scripts/test/*.test.mjs
+      - run: yarn build
+  core:
+    name: Core tests (${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+      - run: corepack enable && corepack prepare yarn@1.22.22 --activate
+      - run: yarn install --frozen-lockfile --ignore-scripts
+      - run: yarn playwright install --with-deps chromium
+      - run: yarn test:prepare
+      - name: Run all tests assigned to this shard
+        run: >-
+          node --import tsx --test --test-concurrency=1
+          --test-reporter=tap --test-shard=${{ matrix.shard }}/4 test/*.test.ts

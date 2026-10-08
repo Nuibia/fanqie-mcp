@@ -1,0 +1,7 @@
+# Merge this entry into your private Codex configuration.
+# Provide FANQIE_MCP_TOKEN in the Host environment; never put a token here.
+[mcp_servers.fanqie]
+url = "http://127.0.0.1:18062/mcp"
+bearer_token_env_var = "FANQIE_MCP_TOKEN"
+startup_timeout_sec = 30
+tool_timeout_sec = 150
