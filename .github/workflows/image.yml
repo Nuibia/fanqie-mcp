@@ -1,0 +1,89 @@
+name: Versioned container
+on:
+  workflow_dispatch:
+    inputs:
+      architecture:
+        description: Native Linux architecture to build and verify
+        type: choice
+        options: [amd64, arm64]
+        default: amd64
+      publish:
+        description: Push to GHCR after validation (requires matching version tag)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: image-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  image:
+    runs-on: ${{ inputs.architecture == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+      - run: corepack enable && corepack prepare yarn@1.22.22 --activate
+      - run: yarn install --frozen-lockfile --ignore-scripts
+      - name: Validate version and publication choice
+        id: metadata
+        env:
+          RELEASE_PUBLISH: ${{ inputs.publish }}
+        run: node scripts/release-metadata.mjs
+      - name: Build the selected native architecture with complete quality checks
+        env:
+          RELEASE_IMAGE: ${{ steps.metadata.outputs.image }}-${{ inputs.architecture }}
+          RELEASE_VERSION: ${{ steps.metadata.outputs.version }}
+          RELEASE_ARCH: ${{ inputs.architecture }}
+        run: >-
+          docker build --platform linux/$RELEASE_ARCH
+          --label org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY
+          --label org.opencontainers.image.revision=$GITHUB_SHA
+          --label org.opencontainers.image.version=$RELEASE_VERSION
+          --tag "$RELEASE_IMAGE" .
+      - name: Initialize credentials and start an isolated empty volume
+        env:
+          FANQIE_IMAGE: ${{ steps.metadata.outputs.image }}-${{ inputs.architecture }}
+        run: |
+          install -d -m 700 "$RUNNER_TEMP/fanqie-release/.secrets"
+          cp compose.release.yaml "$RUNNER_TEMP/fanqie-release/compose.yaml"
+          docker run --rm --network none --user "$(id -u):$(id -g)" \
+            --entrypoint node --workdir /setup \
+            --mount "type=bind,src=$RUNNER_TEMP/fanqie-release/.secrets,dst=/setup/.secrets" \
+            "$FANQIE_IMAGE" /app/scripts/init-secrets.mjs
+          docker compose -p fanqie-release-check \
+            -f "$RUNNER_TEMP/fanqie-release/compose.yaml" up -d --wait --wait-timeout 120
+      - name: Verify authentication, REST and HTTP MCP without a platform account
+        env:
+          FANQIE_TEST_TOKEN_FILE: ${{ runner.temp }}/fanqie-release/.secrets/api-token
+        run: node scripts/release-smoke.mjs
+      - name: Log in to GHCR
+        if: ${{ inputs.publish }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push validated version and record digest
+        if: ${{ inputs.publish }}
+        env:
+          RELEASE_IMAGE: ${{ steps.metadata.outputs.image }}-${{ inputs.architecture }}
+        run: |
+          docker push "$RELEASE_IMAGE"
+          docker image inspect "$RELEASE_IMAGE" --format '{{json .RepoDigests}}' >> "$GITHUB_STEP_SUMMARY"
+      - name: Record rehearsal result
+        if: ${{ !inputs.publish }}
+        run: echo 'Local image checks passed; no image was uploaded.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Clean up the isolated service and its temporary data
+        if: always()
+        env:
+          FANQIE_IMAGE: ${{ steps.metadata.outputs.image }}-${{ inputs.architecture }}
+        run: |
+          if [ -f "$RUNNER_TEMP/fanqie-release/compose.yaml" ]; then
+            docker compose -p fanqie-release-check \
+              -f "$RUNNER_TEMP/fanqie-release/compose.yaml" down -v
+          fi

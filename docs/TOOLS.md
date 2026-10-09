@@ -129,6 +129,10 @@ MCP 在文本和 `structuredContent.result` 中提供结果；登录二维码还
 | `fanqie_submit_short_story`   | `idempotencyKey`, `target`, `expectedContentHash?`, `expectedState`, `snapshotScope?`, `hashBasis?`, `expectedSnapshotVersionHash?`, `useAi?`, `preparationJobId`, `acceptPublicationTerms` | 执行指定已准备版本的提交并回读；审核中不称发布成功，响应丢失先对账。                                                                                                                                     |
 | `fanqie_publish_chapter`      | `idempotencyKey`, `target`, `expectedContentHash?`, `expectedState`, `snapshotScope?`, `hashBasis?`, `expectedSnapshotVersionHash?`, `useAi?`, `preparationJobId`, `acceptPublicationTerms` | 执行指定已准备版本的提交并回读；审核中不称发布成功，响应丢失先对账。                                                                                                                                     |
 
+## 历史 scope 示例
+
+课堂目录带 `category` 时按分类保存：`category="1"` 对应 `writer_classes.tab1`，`category="3"` 对应 `writer_classes.tab3`；省略分类读取全部目录时对应 `writer_classes`。单独读取短故事作品对应 `short_works`；完整四数据集账号刷新才对应 `account`。使用错误 scope 可以返回 `sourceMode="saved"` 且 `manifest=null`，这表示没有该范围的完整快照，不能称为历史读取成功。
+
 ## REST 最小调用
 
 程序可使用 `POST /api/v1/tools/<完整工具名>`，请求体就是工具参数。例如：

@@ -15,9 +15,10 @@ RUN yarn test:prepare && yarn run check && yarn build \
     && rm -f test/fixtures/short-native-submission-public-sources-20261007.json.gz \
         test/fixtures/short-native-submission-public-sources-20261007.manifest.json \
         test/fixtures/short-native-submission-terms-4c89ddd6.txt
+COPY LICENSE THIRD_PARTY_NOTICES.md ./
 COPY scripts/container-entrypoint.sh /usr/local/bin/fanqie-entrypoint
 # Public build contexts may preserve 0600 files; the service runs as pwuser.
-RUN chmod -R a+rX /app/scripts /app/package.json /app/yarn.lock \
+RUN chmod -R a+rX /app/scripts /app/package.json /app/yarn.lock /app/LICENSE /app/THIRD_PARTY_NOTICES.md \
     && chmod 755 /usr/local/bin/fanqie-entrypoint
 EXPOSE 18062 6080
 HEALTHCHECK --interval=20s --timeout=5s --start-period=30s CMD node -e "fetch('http://127.0.0.1:18062/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"

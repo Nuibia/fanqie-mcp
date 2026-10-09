@@ -1,0 +1,29 @@
+name: fanqie-mcp
+services:
+  fanqie-mcp:
+    hostname: fanqie-mcp
+    image: ${FANQIE_IMAGE:?Set FANQIE_IMAGE to a released version tag or digest}
+    pull_policy: missing
+    init: false
+    restart: unless-stopped
+    shm_size: 1gb
+    ports:
+      - '127.0.0.1:18062:18062'
+      - '127.0.0.1:18063:6080'
+    volumes:
+      - fanqie-data:/data
+    secrets:
+      - api_token
+      - vnc_password
+    environment:
+      FANQIE_ACCOUNT_ID: owner
+      FANQIE_ENABLE_WRITES: 'false'
+      FANQIE_ALLOWED_HOSTS: localhost,127.0.0.1,fanqie-mcp
+    stop_grace_period: 150s
+secrets:
+  api_token:
+    file: ./.secrets/api-token
+  vnc_password:
+    file: ./.secrets/vnc-password
+volumes:
+  fanqie-data:

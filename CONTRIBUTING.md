@@ -51,6 +51,8 @@ CI 将格式、类型、脚本测试和构建放在独立的快速检查任务�
 
 ## 提交信息
 
+维护者准备预构建镜像时，按[镜像发行](docs/RELEASING.md)手动执行演练；普通 CI 不上传镜像。发行授权、匹配版本 tag、完整构建与空卷协议检查是上传前置，公开可拉取性与真实 Host 验收另行核对。
+
 采用 Conventional Commits：`type(scope): subject`，scope 可省略，标题不超过 100 字符。类型使用 `feat`、`fix`、`docs`、`style`、`refactor`、`perf`、`test`、`build`、`ci`、`chore` 或 `revert`；本仓不使用 emoji。需要解释原因时，在标题后空一行写正文。
 
 ```text

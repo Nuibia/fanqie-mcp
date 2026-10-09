@@ -156,14 +156,18 @@ test('a write response lost after the effect boundary is uncertain and never bli
   }
 });
 
-test('a live SQLite service lease rejects a second instance and heartbeats keep it alive', async () => {
+test('a live SQLite service lease rejects a second instance and heartbeats keep it alive', async (t) => {
+  // Exercise real SQLite renewal beyond the initial lease without depending on CPU scheduling.
+  t.mock.timers.enable({ apis: ['Date', 'setInterval'], now: Date.now() });
+  const startedAt = Date.now();
   const f = fixture(180);
   try {
     assert.throws(
       () => new Store(f.options),
       (error: unknown) => error instanceof RuntimeError && error.code === 'service_already_running',
     );
-    await delay(400);
+    for (let heartbeat = 0; heartbeat < 7; heartbeat++) t.mock.timers.tick(60);
+    assert.equal(Date.now(), startedAt + 420);
     assert.throws(
       () => new Store(f.options),
       (error: unknown) => error instanceof RuntimeError && error.code === 'service_already_running',
