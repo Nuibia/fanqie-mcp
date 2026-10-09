@@ -40,7 +40,7 @@ docker compose up -d --build
 curl --fail http://127.0.0.1:18062/health
 ```
 
-首次构建会下载依赖和浏览器镜像、准备固定测试资料并运行检查，可能需要数分钟。源码仓库的公开发行状态以 Release 为准。已准备[免 Node/Yarn 的固定版本镜像安装路径](docs/IMAGE.md)，但公开镜像尚未发布；当前按上述源码构建启动。
+首次构建会下载依赖和浏览器镜像、准备固定测试资料并运行检查，可能需要数分钟。源码仓库的公开发行状态以 Release 为准。也可按[固定版本镜像安装](docs/IMAGE.md)直接启动，无需本机 Node/Yarn；可用架构和固定 digest 以[版本发行说明](https://github.com/Nuibia/fanqie-mcp/releases/tag/v0.1.0)为准。
 
 健康检查应返回 `status: "ok"`。接下来在 Agent Host 中连接：
 
@@ -70,7 +70,7 @@ curl --fail http://127.0.0.1:18062/health
 | ------------------------------------ | --------------------------------------- |
 | [快速开始](docs/QUICKSTART.md)       | 安装、首次查询、扫码登录和身份核验      |
 | [客户端接入](docs/CLIENTS.md)        | Codex、Claude Code 的配置与连接验证     |
-| [固定版本镜像](docs/IMAGE.md)        | 公开镜像发行后的免开发环境安装与升级    |
+| [固定版本镜像](docs/IMAGE.md)        | 免开发环境安装、固定版本与升级          |
 | [完整演示](docs/DEMO.md)             | 每一步说什么、成功结果长什么样          |
 | [五份提示词](docs/PROMPTS.md)        | 课程、作品、指标、章节与历史的日常查询  |
 | [工具参考](docs/TOOLS.md)            | 当前 40 个工具、常用参数与结果含义      |

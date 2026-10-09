@@ -2,7 +2,7 @@
 
 目标：先让 Agent 查到一份公开课程目录，再登录读取自己的作品。所有终端命令都在项目根目录执行；终端和 Agent 对话框是两个不同入口。
 
-需要逐步对照预期结果时，打开[完整演示](DEMO.md)；日常场景用[五份提示词](PROMPTS.md)。以下是当前可用的源码构建路径；[固定版本镜像安装](IMAGE.md)已准备，待公开镜像发行后只需 Docker，无需本机 Node/Yarn。
+需要逐步对照预期结果时，打开[完整演示](DEMO.md)；日常场景用[五份提示词](PROMPTS.md)。以下是源码构建路径；也可选择[固定版本镜像安装](IMAGE.md)，只需 Docker、Git 和 Unix shell，无需本机 Node/Yarn。可用架构和 digest 见[版本发行说明](https://github.com/Nuibia/fanqie-mcp/releases/tag/v0.1.0)。
 
 ## 1. 准备环境并启动服务
 

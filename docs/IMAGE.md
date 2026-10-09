@@ -2,14 +2,14 @@
 
 镜像方式只需要 Docker Compose、Git 和 Unix shell，无需在宿主机安装 Node.js、Yarn、浏览器或运行开发测试。源码构建方式继续见[快速开始](QUICKSTART.md)。
 
-**当前尚未发布公开镜像。** 本文是已准备好的安装路径；只有对应 Release 给出可拉取的镜像地址和 digest 后才能照此安装。不要把拟定地址当作已发行版本。发行流程分别构建 `linux/amd64` 或 `linux/arm64`；以 Release 中该架构的实际验收结果为准。
+从[版本发行说明](https://github.com/Nuibia/fanqie-mcp/releases/tag/v0.1.0)选择与你的机器架构对应的已验收镜像和固定 digest。发行流程分别构建 `linux/amd64` 和 `linux/arm64`，使用独立版本标签；本页不使用占位地址冒充发行镜像。
 
 ## 1. 选择版本
 
 克隆源码并进入目录，使用 Release 对应的源码版本。若只部署镜像，也可从该版本下载 `compose.release.yaml`；后续命令在其所在目录执行。
 
 ```sh
-git clone https://github.com/Nuibia/fanqie-mcp.git
+git clone --branch v0.1.0 https://github.com/Nuibia/fanqie-mcp.git
 cd fanqie-mcp
 ```
 
