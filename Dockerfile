@@ -10,7 +10,10 @@ COPY eslint.config.mjs commitlint.config.mjs .prettierrc.json .prettierignore ./
 COPY src ./src
 COPY test ./test
 COPY scripts ./scripts
-RUN yarn test:prepare && yarn run check && yarn build \
+# Match CI's serial core tests so independent fixtures do not compete for deadlines.
+RUN yarn test:prepare && yarn lint && yarn format:check && yarn typecheck \
+    && node --import tsx --test --test-concurrency=1 test/*.test.ts \
+    && node --no-warnings --test --test-concurrency=2 scripts/test/*.test.mjs && yarn build \
     && yarn install --frozen-lockfile --production=true --ignore-scripts --non-interactive \
     && rm -f test/fixtures/short-native-submission-public-sources-20261007.json.gz \
         test/fixtures/short-native-submission-public-sources-20261007.manifest.json \
